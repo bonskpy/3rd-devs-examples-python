@@ -1,6 +1,7 @@
-import dotenv
 import logging
+import os
 from OpenAIService import OpenAIService
+from dotenv import load_dotenv
 
 def generate_summary_prompt(user_message: str, assistant_response: str, previous_summary: str = "This is our first conversation!") -> list:
     """
@@ -57,15 +58,19 @@ def create_user_prompt(user_message: str) -> dict:
 
     return user_prompt
 
+def load_env_variables():
+    dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    load_dotenv(dotenv_path=dotenv_path)
+
 def main():
     """
     Main function to run the conversation.
     """
 
-    logging.basicConfig(filename='conversation.log', level=logging.INFO,
+    logging.basicConfig(filename=f'{os.path.dirname(__file__)}/conversation.log', level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(message)s')
 
-    dotenv.load_dotenv()
+    load_env_variables()
     openai = OpenAIService()
 
     previous_summary = "We have just started our conversation!"
